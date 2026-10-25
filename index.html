@@ -3,10 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hardcore Coding Engine Hub</title>
+    <title>⚡ CORE CODING ENGINE v2.0</title>
+    <style>
+        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 20px; }
+        .terminal { border: 1px solid #30363d; background: #161b22; border-radius: 6px; padding: 20px; max-width: 900px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        .header { border-bottom: 1px solid #30363d; padding-bottom: 10px; margin-bottom: 20px; color: #58a6ff; font-weight: bold; }
+        .config-box { background: #010409; border: 1px solid #30363d; padding: 10px; border-radius: 4px; margin-bottom: 15px; display: flex; gap: 10px; align-items: center; }
+        .config-box input { flex: 1; background: #161b22; border: 1px solid #30363d; color: #fff; padding: 6px; border-radius: 4px; font-family: inherit; }
+        .output-box { min-height: 300px; background: #010409; border: 1px solid #21262d; border-radius: 4px; padding: 15px; margin-bottom: 20px; overflow-x: auto; white-space: pre-wrap; color: #7ee787; font-size: 13px; line-height: 1.5; }
+        .input-line { display: flex; align-items: center; background: #21262d; border-radius: 4px; padding: 8px 10px; }
+        .prompt-symbol { color: #ff7b72; margin-right: 10px; font-weight: bold; }
+        textarea { flex: 1; background: transparent; border: none; color: #ffffff; font-family: inherit; font-size: 14px; outline: none; resize: vertical; height: 50px; }
+        button { background: #238636; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; letter-spacing: 1px; }
+        button:hover { background: #2ea043; }
+        button:disabled { background: #21262d; color: #8b949e; cursor: not-allowed; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Core Engine Hub</h1>
-    <p>Server status: Active and online 24/7.</p>
+
+<div class="terminal">
+    <div class="header">[ SYSTEM ARCHITECT ENGINE // DEEPSEEK-CODER-V2 ]</div>
+    
+    <!-- Secret Token Entry Vault -->
+    <div class="config-box">
+        <label style="font-size: 12px; color: #8b949e;">HF_TOKEN:</label>
+        <input type="password" id="tokenInput" placeholder="Paste your hf_... access token here to unlock infrastructure">
+    </div>
+    
+    <div class="output-box" id="output">// ENGINE STATUS: ONLINE (RESERVED TIER)
+// Ready for bare-metal systems processing. Provide your API key above to proceed.</div>
+    
+    <div class="input-line">
+        <span class="prompt-symbol">&gt;&gt;</span>
+        <textarea id="promptInput" placeholder="Input multi-threading locks, strict memory architectures, kernel requirements..."></textarea>
+    </div>
+    
+    <button id="execBtn" onclick="compileCode()">EXECUTE COMPILATION ENGINE</button>
+</div>
+
+<script>
+    async function compileCode() {
+        const token = document.getElementById('tokenInput').value.trim();
+        const input = document.getElementById('promptInput').value.trim();
+        const output = document.getElementById('output');
+        const btn = document.getElementById('execBtn');
+        
+        if(!token) {
+            output.innerHTML = "❌ SYSTEM ERROR: Missing Authentication Token. Please provide your Hugging Face read token in the vault.";
+            return;
+        }
+        if(!input) return;
+        
+        // Visual compilation cue
+        btn.disabled = true;
+        output.innerHTML = "// CONNECTING TO DEEPSEEK-CODER-V2 ROUTER INTERFACE...\n// DEPLOYING PIPELINE CONSTRAINTS... INFERENCE IN PROGRESS...";
+        
+        try {
+            // Using the official Serverless Endpoint for DeepSeek-Coder-V2
+            const response = await fetch("https://huggingface.co", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "deepseek-ai/DeepSeek-Coder-V2-Instruct",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a Hardcore AI Software Engineer and System Architect. Your ONLY purpose is to write hyper-optimized, production-ready, secure, and syntactically flawless code. CRITICAL: DO NOT engage in casual conversation, greetings, or polite filler. Do not explain basic concepts. Output strictly raw code and architectural layouts embedded inside standard code comments."
+                        },
+                        {
+                            role: "user",
+                            content: input
+                        }
+                    ],
+                    parameters: { max_new_tokens: 1500, temperature: 0.1 }
+                })
+            });
+            
+            const data = await response.json();
+            btn.disabled = false;
+            
+            if (response.ok && data.choices && data.choices[0]) {
+                output.innerText = data.choices[0].message.content;
+            } else if (data.error) {
+                output.innerText = `❌ ENGINE FAIL: ${data.error}`;
+            } else {
+                output.innerText = `❌ ARCHITECTURE EXCEPTION:\n${JSON.stringify(data, null, 2)}`;
+            }
+            
+        } catch (err) {
+            btn.disabled = false;
+            output.innerText = `❌ TRANSPORT ERROR: Failed to route traffic. Details: ${err.message}`;
+        }
+    }
+</script>
 </body>
 </html>
